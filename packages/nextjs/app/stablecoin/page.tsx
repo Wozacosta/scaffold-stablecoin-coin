@@ -14,17 +14,17 @@ const ERC20: NextPage = () => {
   const [amount, setAmount] = useState<string>("");
 
   const { data: balance } = useScaffoldReadContract({
-    contractName: "SE2Token",
+    contractName: "DecentralizedStableCoin",
     functionName: "balanceOf",
     args: [connectedAddress],
   });
 
   const { data: totalSupply } = useScaffoldReadContract({
-    contractName: "SE2Token",
+    contractName: "DecentralizedStableCoin",
     functionName: "totalSupply",
   });
 
-  const { writeContractAsync: writeSE2TokenAsync } = useScaffoldWriteContract("SE2Token");
+  const { writeContractAsync: writeSE2TokenAsync } = useScaffoldWriteContract("DecentralizedStableCoin");
 
   return (
     <>

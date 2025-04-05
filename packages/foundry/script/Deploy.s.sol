@@ -2,7 +2,9 @@
 pragma solidity ^0.8.19;
 
 import "./DeployHelpers.s.sol";
-import { DeploySE2Token } from "./DeploySE2Token.s.sol";
+// import "../contracts/WBTC.sol";
+// import "../contracts/WETH.sol";
+import {DeployERC20s} from "./DeployERC20s.s.sol";
 
 /**
  * @notice Main deployment script for all contracts
@@ -15,8 +17,11 @@ contract DeployScript is ScaffoldETHDeploy {
         // Deploys all your contracts sequentially
         // Add new deployments here when needed
 
-        DeploySE2Token deploySE2Token = new DeploySE2Token();
-        deploySE2Token.run();
+        DeployERC20s deployerERC20s = new DeployERC20s();
+        (address wBTC, address wETH) = deployerERC20s.run();
+        console.log("in deploy script");
+        console.log("wbtc address: ", wBTC);
+        console.log("weth address: ", wETH);
 
         // Deploy another contract
         // DeployMyContract myContract = new DeployMyContract();
