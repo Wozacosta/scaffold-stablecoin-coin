@@ -11,6 +11,7 @@ contract DeploySE2Token is ScaffoldETHDeploy {
         SE2Token se2Token = new SE2Token();
         wBTC wbtc = new wBTC();
         DecentralizedStableCoin dsc = new DecentralizedStableCoin();
+
         console.logString(
             string.concat("WBTC deployed at: ", vm.toString(address(wbtc)))
         );
