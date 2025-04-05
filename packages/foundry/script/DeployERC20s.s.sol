@@ -8,22 +8,17 @@ import "../contracts/DecentralizedStablecoin.sol";
 import "./DeployHelpers.s.sol";
 
 contract DeployERC20s is ScaffoldETHDeploy {
-    function run()
-        external
-        ScaffoldEthDeployerRunner
-        returns (address, address)
-    {
+    address[] public tokenAddresses;
+    address[] public priceFeedAddresses;
+
+    function run() external ScaffoldEthDeployerRunner {
         // SE2Token se2Token = new SE2Token();
-        wBTC wbtc = new wBTC();
-        wETH weth = new wETH();
+        // wBTC wbtc = new wBTC();
+        // wETH weth = new wETH();
         DecentralizedStableCoin dsc = new DecentralizedStableCoin();
 
         console.logString(
-            string.concat("WBTC deployed at: ", vm.toString(address(wbtc)))
+            string.concat("DSC deployed at: ", vm.toString(address(dsc)))
         );
-        console.logString(
-            string.concat("WETH deployed at: ", vm.toString(address(weth)))
-        );
-        return (address(wbtc), address(weth));
     }
 }
