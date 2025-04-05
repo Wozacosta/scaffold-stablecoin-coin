@@ -189,7 +189,10 @@ contract DSCEngine is ReentrancyGuard {
         isAllowedToken(tokenCollateralAddress)
         nonReentrant
     {
-        console.log("depositing!");
+        console.log("------ depositing -------");
+        console.log("msg.sender = %s", msg.sender);
+        console.log("tokenCollateralAddress = %s", tokenCollateralAddress);
+        console.log("amountCollateral = %d", amountCollateral);
         // Effects
         s_collateralDeposited[msg.sender][
             tokenCollateralAddress
@@ -204,6 +207,9 @@ contract DSCEngine is ReentrancyGuard {
         // TODO: allowance checks?
         // https://ethereum.stackexchange.com/questions/28972/who-is-msg-sender-when-calling-a-contract-from-a-contract
         console.log("before transfer from");
+        console.log("from = %s", msg.sender);
+        console.log("to = %s", address(this));
+        // need approval from msg.sender -> for address(this) to spend
         bool success = IERC20(tokenCollateralAddress).transferFrom(
             msg.sender,
             address(this),
@@ -211,8 +217,10 @@ contract DSCEngine is ReentrancyGuard {
         );
         console.log("after transfer from");
         if (!success) {
+            console.log("-----failed-----");
             revert DSCEngine__TransferFailed();
         }
+        console.log("-----------");
     }
 
     /**
@@ -268,7 +276,10 @@ contract DSCEngine is ReentrancyGuard {
         // mint DSC
         s_DSCMinted[msg.sender] += amountDscToMint;
         // if they minted too much ($150 DSC, $100 ETH), revert
+        console.log("OK ?");
         _revertIfHealthFactorIsBroken(msg.sender);
+        console.log("address caller = %s", address(this));
+        console.log("will mint, msg.sender = %s", msg.sender);
         bool minted = i_dsc.mint(msg.sender, amountDscToMint);
         if (!minted) {
             revert DSCEngine__MintFailed();
@@ -576,5 +587,43 @@ contract DSCEngine is ReentrancyGuard {
         address token
     ) external view returns (address) {
         return s_priceFeeds[token];
+    }
+
+    // @notice Returns total supply of DSC and total collateral value in USD (with 18 decimals)
+    function getProtocolStats()
+        external
+        view
+        returns (uint256 totalDscSupply, uint256 totalCollateralUsdValue)
+    {
+        totalDscSupply = i_dsc.totalSupply();
+        totalCollateralUsdValue = _getTotalCollateralValueUsd();
+    }
+
+    // Internal function to calculate total collateral value in USD
+    function _getTotalCollateralValueUsd()
+        internal
+        view
+        returns (uint256 totalCollateralValueInUsd)
+    {
+        for (uint256 i = 0; i < s_collateralTokens.length; i++) {
+            address token = s_collateralTokens[i];
+            uint256 tokenBalance = IERC20(token).balanceOf(address(this));
+
+            if (tokenBalance > 0) {
+                AggregatorV3Interface priceFeed = AggregatorV3Interface(
+                    s_priceFeeds[token]
+                );
+                (, int256 price, , , ) = priceFeed.staleCheckLatestRoundData();
+                console.log("pricefeed = %d", price);
+                uint256 priceWithPrecision = uint256(price) *
+                    ADDITIONAL_FEED_PRECISION;
+                console.log("pricefeed2 = %d", priceWithPrecision);
+
+                uint256 usdValue = (priceWithPrecision * tokenBalance) /
+                    (PRECISION * PRECISION);
+                console.log("usdvalue = %d", usdValue);
+                totalCollateralValueInUsd += usdValue;
+            }
+        }
     }
 }

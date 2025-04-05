@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     wBTC: {
-      address: "0x9fe46736679d2d9a65f0992f2272de9f3c7fa6e0",
+      address: "0x9e545e3c0baab3e08cdfd552c960a1050f373042",
       abi: [
         {
           type: "constructor",
@@ -304,11 +304,11 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deploymentFile: "run-1743844625.json",
+      deploymentFile: "run-1743851660.json",
       deploymentScript: "Deploy.s.sol",
     },
     wETH: {
-      address: "0xcf7ed3acca5a467e9e704c703e8d87f634fb0fc9",
+      address: "0xa82ff9afd8f496c3d6ac40e2a0f282e47488cfc9",
       abi: [
         {
           type: "constructor",
@@ -605,11 +605,11 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deploymentFile: "run-1743844625.json",
+      deploymentFile: "run-1743851660.json",
       deploymentScript: "Deploy.s.sol",
     },
     MockV3Aggregator: {
-      address: "0xdc64a140aa3e981100a9beca4e685f962f0cf6c9",
+      address: "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
       abi: [
         {
           type: "constructor",
@@ -858,11 +858,11 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deploymentFile: "run-1743844625.json",
+      deploymentFile: "run-1743851660.json",
       deploymentScript: "Deploy.s.sol",
     },
     DecentralizedStableCoin: {
-      address: "0x0165878a594ca255338adfa4d48449f69242eb8f",
+      address: "0xf5059a5d33d5853360d16c683c16e67980206f36",
       abi: [
         {
           type: "constructor",
@@ -1274,11 +1274,11 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deploymentFile: "run-1743844625.json",
+      deploymentFile: "run-1743851660.json",
       deploymentScript: "Deploy.s.sol",
     },
     DSCEngine: {
-      address: "0xa513e6e4b8f2a923d98304ec87f64353c4d5c853",
+      address: "0x95401dc811bb5740090279ba06cfa8fcf6113778",
       abi: [
         {
           type: "constructor",
@@ -1590,6 +1590,24 @@ const deployedContracts = {
         },
         {
           type: "function",
+          name: "getProtocolStats",
+          inputs: [],
+          outputs: [
+            {
+              name: "totalDscSupply",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "totalCollateralUsdValue",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
           name: "getTokenAmountFromUsd",
           inputs: [
             {
@@ -1817,7 +1835,7 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deploymentFile: "run-1743844625.json",
+      deploymentFile: "run-1743851660.json",
       deploymentScript: "Deploy.s.sol",
     },
   },
