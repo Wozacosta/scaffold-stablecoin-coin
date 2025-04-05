@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     wBTC: {
-      address: "0x700b6a60ce7eaaea56f065753d8dcb9653dbad35",
+      address: "0x9fe46736679d2d9a65f0992f2272de9f3c7fa6e0",
       abi: [
         {
           type: "constructor",
@@ -304,11 +304,11 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deploymentFile: "run-1743842193.json",
+      deploymentFile: "run-1743844625.json",
       deploymentScript: "Deploy.s.sol",
     },
     wETH: {
-      address: "0xa15bb66138824a1c7167f5e85b957d04dd34e468",
+      address: "0xcf7ed3acca5a467e9e704c703e8d87f634fb0fc9",
       abi: [
         {
           type: "constructor",
@@ -605,11 +605,11 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deploymentFile: "run-1743842193.json",
+      deploymentFile: "run-1743844625.json",
       deploymentScript: "Deploy.s.sol",
     },
     MockV3Aggregator: {
-      address: "0xb19b36b1456e65e3a6d514d3f715f204bd59f431",
+      address: "0xdc64a140aa3e981100a9beca4e685f962f0cf6c9",
       abi: [
         {
           type: "constructor",
@@ -858,11 +858,11 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deploymentFile: "run-1743842193.json",
+      deploymentFile: "run-1743844625.json",
       deploymentScript: "Deploy.s.sol",
     },
     DecentralizedStableCoin: {
-      address: "0x5fbdb2315678afecb367f032d93f642f64180aa3",
+      address: "0x0165878a594ca255338adfa4d48449f69242eb8f",
       abi: [
         {
           type: "constructor",
@@ -1274,7 +1274,550 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deploymentFile: "run-1743842193.json",
+      deploymentFile: "run-1743844625.json",
+      deploymentScript: "Deploy.s.sol",
+    },
+    DSCEngine: {
+      address: "0xa513e6e4b8f2a923d98304ec87f64353c4d5c853",
+      abi: [
+        {
+          type: "constructor",
+          inputs: [
+            {
+              name: "tokenAddresses",
+              type: "address[]",
+              internalType: "address[]",
+            },
+            {
+              name: "priceFeedAddresses",
+              type: "address[]",
+              internalType: "address[]",
+            },
+            {
+              name: "dscAddress",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "burnDSC",
+          inputs: [
+            {
+              name: "amount",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "calculateHealthFactor",
+          inputs: [
+            {
+              name: "totalDscMinted",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "collateralValueInUsd",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "pure",
+        },
+        {
+          type: "function",
+          name: "depositCollateral",
+          inputs: [
+            {
+              name: "tokenCollateralAddress",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "amountCollateral",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "depositCollateralAndMintDSC",
+          inputs: [
+            {
+              name: "tokenCollateralAddress",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "amountCollateral",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "amountDscToMint",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "getAccountCollateralValue",
+          inputs: [
+            {
+              name: "user",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          outputs: [
+            {
+              name: "totalCollateralValueInUsd",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "getAccountInformation",
+          inputs: [
+            {
+              name: "user",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          outputs: [
+            {
+              name: "totalDscMinted",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "collateralValueInUsd",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "getAdditionalFeedPrecision",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "pure",
+        },
+        {
+          type: "function",
+          name: "getCollateralBalanceOfUser",
+          inputs: [
+            {
+              name: "user",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "token",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "getCollateralTokenPriceFeed",
+          inputs: [
+            {
+              name: "token",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "getCollateralTokens",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "address[]",
+              internalType: "address[]",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "getDsc",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "getHealthFactor",
+          inputs: [
+            {
+              name: "user",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "getLiquidationBonus",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "pure",
+        },
+        {
+          type: "function",
+          name: "getLiquidationPrecision",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "pure",
+        },
+        {
+          type: "function",
+          name: "getLiquidationThreshold",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "pure",
+        },
+        {
+          type: "function",
+          name: "getMinHealthFactor",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "pure",
+        },
+        {
+          type: "function",
+          name: "getPrecision",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "pure",
+        },
+        {
+          type: "function",
+          name: "getTokenAmountFromUsd",
+          inputs: [
+            {
+              name: "token",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "usdAmountInWei",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "getUsdValue",
+          inputs: [
+            {
+              name: "token",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "amount",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "liquidate",
+          inputs: [
+            {
+              name: "collateral",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "user",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "debtToCover",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "mintDSC",
+          inputs: [
+            {
+              name: "amountDscToMint",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "redeemCollateral",
+          inputs: [
+            {
+              name: "tokenCollateralAddress",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "amountCollateral",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
+          name: "redeemCollateralForDSC",
+          inputs: [
+            {
+              name: "tokenCollateralAddress",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "amountCollateral",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "amountDscToBurn",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "event",
+          name: "CollateralDeposited",
+          inputs: [
+            {
+              name: "user",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "token",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "amount",
+              type: "uint256",
+              indexed: true,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "event",
+          name: "CollateralRedeemed",
+          inputs: [
+            {
+              name: "redeemedFrom",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "redeemedTo",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "token",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "amount",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+          ],
+          anonymous: false,
+        },
+        {
+          type: "error",
+          name: "DSCEngine__BreaksHealthFactor",
+          inputs: [
+            {
+              name: "healthFactor",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+        },
+        {
+          type: "error",
+          name: "DSCEngine__HealthFactorNotImproved",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "DSCEngine__HealthFactorOk",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "DSCEngine__MintFailed",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "DSCEngine__NeedsMoreThanZero",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "DSCEngine__NotAllowedToken",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "DSCEngine__TokenAddressesAndPriceFeedAddressesLengthMismatch",
+          inputs: [],
+        },
+        {
+          type: "error",
+          name: "DSCEngine__TransferFailed",
+          inputs: [],
+        },
+      ],
+      inheritedFunctions: {},
+      deploymentFile: "run-1743844625.json",
       deploymentScript: "Deploy.s.sol",
     },
   },

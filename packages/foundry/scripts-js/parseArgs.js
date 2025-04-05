@@ -33,6 +33,8 @@ Examples:
   process.exit(0);
 }
 
+console.log("\n🔍 Parsing arguments...");
+console.log({ args });
 // Parse arguments
 for (let i = 0; i < args.length; i++) {
   if (args[i] === "--network" && args[i + 1]) {
@@ -148,6 +150,7 @@ The default account (scaffold-eth-default) can only be used for localhost deploy
   process.exit(0);
 }
 
+console.log("BEFORE DEPLOY AND GENERATE ABIS");
 // Set environment variables for the make command
 process.env.DEPLOY_SCRIPT = `script/${fileName}`;
 process.env.RPC_URL = network;

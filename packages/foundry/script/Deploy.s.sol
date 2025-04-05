@@ -4,6 +4,7 @@ pragma solidity ^0.8.19;
 import {Script, console} from "forge-std/Script.sol";
 import "./DeployHelpers.s.sol";
 import {DecentralizedStableCoin} from "../contracts/DecentralizedStableCoin.sol";
+import {DSCEngine} from "../contracts/DSCEngine.sol";
 import {DeployERC20s} from "./DeployERC20s.s.sol";
 import {HelperConfig} from "./HelperConfig.s.sol";
 
@@ -38,16 +39,27 @@ contract DeployScript is ScaffoldETHDeploy {
             address wbtc,
             uint256 deployerKey
         ) = helperConfig.activeNetworkConfig();
+        tokenAddresses = [weth, wbtc];
+        priceFeedAddresses = [wethUsdPriceFeed, wbtcUsdPriceFeed];
 
         vm.startBroadcast(deployerKey);
+
         DecentralizedStableCoin dsc = new DecentralizedStableCoin();
+
+        DSCEngine dscEngine = new DSCEngine(
+            tokenAddresses,
+            priceFeedAddresses,
+            address(dsc)
+        );
+
+        // dsc.transferOwnership(address(dscEngine));
+        // console.log("dscEngine address: ", address(dscEngine));
+
+        vm.stopBroadcast();
+
         console.log("in deploy script");
         console.log("wbtc address: ", wbtc);
         console.log("weth address: ", weth);
         console.log("dsc address: ", address(dsc));
-
-        tokenAddresses = [weth, wbtc];
-        priceFeedAddresses = [wethUsdPriceFeed, wbtcUsdPriceFeed];
-        vm.stopBroadcast();
     }
 }

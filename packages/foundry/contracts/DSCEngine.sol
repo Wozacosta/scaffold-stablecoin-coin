@@ -137,6 +137,7 @@ contract DSCEngine is ReentrancyGuard {
         address[] memory priceFeedAddresses,
         address dscAddress
     ) {
+        console.log("in constructor of dscengine");
         // tokenAddresses[0] maps to priceFeedAddresses[0]
         // tokenAddresses[1] maps to priceFeedAddresses[1]
         // etc...
@@ -150,6 +151,7 @@ contract DSCEngine is ReentrancyGuard {
             s_collateralTokens.push(tokenAddresses[i]);
         }
         i_dsc = DecentralizedStableCoin(dscAddress);
+        console.log("finished constructing dscengine");
     }
 
     /* --------------------- 
