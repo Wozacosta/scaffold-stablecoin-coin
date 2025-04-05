@@ -15,29 +15,54 @@ const Home: NextPage = () => {
         <div className="px-5">
           <h1 className="text-center">
             <span className="block text-2xl mb-2">Welcome to</span>
-            <span className="block text-4xl font-bold">Scaffold-ETH 2</span>
+            <h1 className="text-4xl font-bold">Decentralized Stablecoin Protocol (DSC)</h1>
           </h1>
           <div className="flex justify-center items-center space-x-2 flex-col">
             <p className="my-2 font-medium">Connected Address:</p>
             <Address address={connectedAddress} />
           </div>
+        </div>
 
-          <p className="text-center text-lg">
-            Get started by editing{" "}
-            <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-              packages/nextjs/app/page.tsx
-            </code>
-          </p>
-          <p className="text-center text-lg">
-            Edit your smart contract{" "}
-            <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-              YourContract.sol
-            </code>{" "}
-            in{" "}
-            <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-              packages/hardhat/contracts
-            </code>
-          </p>
+        <div className="px-5 text-center max-w-4xl">
+          <div className="mt-4 space-y-4 text-lg">
+            <p>
+              DSC is a decentralized, crypto-backed stablecoin pegged to the US dollar. Anyone can mint DSC by locking
+              up crypto collateral.
+            </p>
+            <p>
+              💰 <strong>Minting:</strong> Deposit <strong>WETH</strong> or <strong>WBTC</strong> as collateral and mint
+              DSC tokens in return.
+            </p>
+            <p>
+              🛡️ <strong>Always overcollateralized:</strong> The protocol ensures that the total value of collateral
+              always exceeds the amount of DSC in circulation.
+            </p>
+            <p>
+              ⚖️ <strong>Incentivized liquidations:</strong> When positions become risky, liquidators are rewarded for
+              helping maintain protocol health.
+            </p>
+            <p>
+              🔍 <strong>Fully transparent:</strong> All data is available on-chain. You can monitor supply, collateral
+              balance, and system health live.
+            </p>
+            <p>
+              🪙 <strong>Stable by design:</strong> DSC aims to hold its $1 peg through strong collateral backing and
+              clear economic incentives, without relying on central entities.
+            </p>
+          </div>
+
+          <div className="divider my-6" />
+
+          <h2 className="text-3xl font-bold mt-4">How it works:</h2>
+          <div className="mt-4 space-y-3 text-lg">
+            <p>1️⃣ Deposit crypto collateral (WETH or WBTC).</p>
+            <p>2️⃣ Mint DSC tokens based on your deposited value.</p>
+            <p>3️⃣ Track the protocol stats in real-time — including total supply and collateralization ratio.</p>
+            <p>
+              4️⃣ If the system health drops, liquidators are incentivized to restore balance by seizing
+              undercollateralized positions.
+            </p>
+          </div>
         </div>
 
         <div className="flex-grow bg-base-300 w-full mt-16 px-8 py-12">

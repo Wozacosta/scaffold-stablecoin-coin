@@ -7,6 +7,16 @@ import { useAccount } from "wagmi";
 import { AddressInput, InputBase } from "~~/components/scaffold-eth";
 import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
+const formatUsd = (value: any) => {
+  const formatted = parseFloat(formatEther(value)).toFixed(2);
+  return `$${formatted}`;
+};
+const getRatioColor = (ratio: number) => {
+  if (ratio >= 2) return "text-green-500";
+  if (ratio >= 1.5) return "text-yellow-500";
+  return "text-red-500";
+};
+
 const ERC20: NextPage = () => {
   const { address: connectedAddress } = useAccount();
 
@@ -24,6 +34,21 @@ const ERC20: NextPage = () => {
     functionName: "totalSupply",
   });
 
+  const { data: stats } = useScaffoldReadContract({
+    contractName: "DSCEngine",
+    functionName: "getProtocolStats",
+    // args: [],
+  });
+  const totalDscSupply = stats?.[0] ?? 0n;
+  const totalCollateralUsdValue = stats?.[1] ?? 0n;
+  // {data: Array(2)}
+  //data [2n,24000n]
+  console.log({ stats });
+  const collateralizationRatio =
+    totalDscSupply > 0n ? Number(totalCollateralUsdValue) / Number(totalDscSupply) : Infinity;
+  console.log("Protocol Collateralization Ratio:", collateralizationRatio);
+  const formattedRatio = collateralizationRatio === Infinity ? "∞" : `${(collateralizationRatio * 100).toFixed(2)}%`;
+
   const { writeContractAsync: writeSE2TokenAsync } = useScaffoldWriteContract("DecentralizedStableCoin");
 
   return (
@@ -32,50 +57,23 @@ const ERC20: NextPage = () => {
         <div className="px-5 text-center max-w-4xl">
           <h1 className="text-4xl font-bold">ERC-20 Token</h1>
           <div>
-            <p>
-              This extension introduces an ERC-20 token contract and demonstrates how to use interact with it, including
-              getting a holder balance and transferring tokens.
-            </p>
-            <p>
-              The ERC-20 Token Standard introduces a standard for Fungible Tokens (
-              <a
-                target="_blank"
-                href="https://eips.ethereum.org/EIPS/eip-20"
-                className="underline font-bold text-nowrap"
-              >
-                EIP-20
-              </a>
-              ), in other words, each Token is exactly the same (in type and value) as any other Token.
-            </p>
-            <p>
-              The ERC-20 token contract is implemented using the{" "}
-              <a
-                target="_blank"
-                href="https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/ERC20.sol"
-                className="underline font-bold text-nowrap"
-              >
-                ERC-20 token implementation
-              </a>{" "}
-              from OpenZeppelin.
-            </p>
+            <div className="flex justify-center items-center space-x-2 flex-col sm:flex-row">
+              <p className="my-2 mr-2 font-bold text-2xl">Total DSC Supply:</p>
+              <p className="text-xl">{formatEther(totalDscSupply)} DSC</p>
+            </div>
+
+            <div className="flex justify-center items-center space-x-2 flex-col sm:flex-row">
+              <p className="my-2 mr-2 font-bold text-2xl">Total Collateral Value (USD):</p>
+              <p className="text-xl">{formatEther(totalCollateralUsdValue)} USD</p>
+              <p className="text-xl">{formatUsd(totalCollateralUsdValue)}</p>
+            </div>
+            <div className="flex justify-center items-center space-x-2 flex-col sm:flex-row">
+              <p className="my-2 mr-2 font-bold text-2xl">Collateralization Ratio:</p>
+              <p className={`text-xl ${getRatioColor(collateralizationRatio)}`}>{formattedRatio}</p>
+            </div>
           </div>
 
           <div className="divider my-0" />
-
-          <h2 className="text-3xl font-bold mt-4">Interact with the token</h2>
-
-          <div>
-            <p>Below you can see the total token supply (total amount of minted tokens) and your token balance.</p>
-            <p>
-              You can use the <strong>Mint 100 Tokens</strong> button to get 100 new tokens (for free! Check the
-              contract implementation)
-            </p>
-            <p>
-              You can also transfer tokens to another address. Just fill in the address and the amount of tokens you
-              want to send and click the send button. Test it by opening this page on an incognito window and sending
-              tokens to the new generated burner wallet address.
-            </p>
-          </div>
         </div>
 
         <div className="flex flex-col justify-center items-center bg-base-300 w-full mt-8 px-8 pt-6 pb-12">
