@@ -7,7 +7,8 @@ import { useAccount } from "wagmi";
 import { TokenValue } from "~~/components/TokenValue";
 import { UserStatsCard } from "~~/components/UserStatsCard";
 import { AddressInput, InputBase } from "~~/components/scaffold-eth";
-import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
+// import deployedContracts from "~~/generated/deployedContracts";
+import { useDeployedContractInfo, useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
 const formatUsd = (value: any) => {
   const formatted = parseFloat(formatEther(value)).toFixed(2);
@@ -24,6 +25,9 @@ const ERC20: NextPage = () => {
 
   const [toAddress, setToAddress] = useState<string>("");
   const [amount, setAmount] = useState<string>("");
+  const { data: deployedContractData } = useDeployedContractInfo({ contractName: "DSCEngine" });
+  const dscEngineAddress = deployedContractData?.address;
+  console.log({ dscEngineAddress });
 
   const { data: balance } = useScaffoldReadContract({
     contractName: "DecentralizedStableCoin",
@@ -93,7 +97,9 @@ const ERC20: NextPage = () => {
           <div className="divider my-0" />
         </div>
 
-        {usersAddresses?.map(user => <UserStatsCard key={user} user={user} collateralTokens={tokens} />)}
+        {usersAddresses?.map(user => (
+          <UserStatsCard dscEngineAddress={dscEngineAddress || ""} key={user} user={user} collateralTokens={tokens} />
+        ))}
 
         <div className="flex flex-col justify-center items-center bg-base-300 w-full mt-8 px-8 pt-6 pb-12">
           <div className="flex justify-center items-center space-x-2 flex-col sm:flex-row">

@@ -7,6 +7,7 @@ import { Address } from "~~/components/scaffold-eth";
 import { useScaffoldReadContract } from "~~/hooks/scaffold-eth";
 
 type UserStatsCardProps = {
+  dscEngineAddress: string;
   user: string;
   collateralTokens: string[];
 };
@@ -44,7 +45,7 @@ export const TokenBalance: React.FC<TokenBalanceProps> = ({ user, token }) => {
   );
 };
 
-export const UserStatsCard: React.FC<UserStatsCardProps> = ({ user, collateralTokens }) => {
+export const UserStatsCard: React.FC<UserStatsCardProps> = ({ dscEngineAddress, user, collateralTokens }) => {
   const [showLiquidateForm, setShowLiquidateForm] = useState(false);
 
   console.log({ user, collateralTokens });
@@ -89,7 +90,12 @@ export const UserStatsCard: React.FC<UserStatsCardProps> = ({ user, collateralTo
       )}
 
       {showLiquidateForm && (
-        <LiquidateForm user={user} collateralTokens={collateralTokens} showLiquidateForm={setShowLiquidateForm} />
+        <LiquidateForm
+          dscEngineAddress={dscEngineAddress}
+          user={user}
+          collateralTokens={collateralTokens}
+          showLiquidateForm={setShowLiquidateForm}
+        />
       )}
     </div>
   );

@@ -10,6 +10,7 @@ type LiquidateProps = {
   user: string;
   collateralTokens: string[];
   showLiquidateForm: any;
+  dscEngineAddress: string;
 };
 
 const TokenOption: React.FC<{ token: string }> = ({ token }) => {
@@ -23,10 +24,16 @@ const TokenOption: React.FC<{ token: string }> = ({ token }) => {
   return <option value={token}>{symbol ?? token}</option>;
 };
 
-export const LiquidateForm: React.FC<LiquidateProps> = ({ user, collateralTokens, showLiquidateForm }) => {
+export const LiquidateForm: React.FC<LiquidateProps> = ({
+  user,
+  collateralTokens,
+  showLiquidateForm,
+  dscEngineAddress,
+}) => {
   const [debtToCover, setDebtToCover] = useState<string>("0");
   const [collateralToken, setCollateralToken] = useState<string>(collateralTokens[0] ?? "");
   const { writeContractAsync } = useScaffoldWriteContract("DSCEngine");
+  const { writeContractAsync: approveContractAsync } = useScaffoldWriteContract("DecentralizedStableCoin");
 
   return (
     <div className="bg-base-100 p-2 rounded-xl mt-2">
@@ -60,6 +67,10 @@ export const LiquidateForm: React.FC<LiquidateProps> = ({ user, collateralTokens
         className="btn btn-primary w-full mt-2"
         onClick={async () => {
           try {
+            await approveContractAsync({
+              functionName: "approve",
+              args: [dscEngineAddress, parseEther(debtToCover)],
+            });
             await writeContractAsync({
               functionName: "liquidate",
               args: [collateralToken, user, parseEther(debtToCover)],

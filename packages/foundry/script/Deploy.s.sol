@@ -27,6 +27,10 @@ contract DeployScript is ScaffoldETHDeploy {
     uint256 public USER3_PK =
         0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a;
 
+    address public USER4 = 0x90F79bf6EB2c4f870365E785982E1f101E93b906;
+    uint256 public USER4_PK =
+        0x7c852118294e51e653712a81e05800f419141751be58f605c371e15141b007a6;
+
     function run() external {
         // NOTE: maybe do sequentially
         // Deploys all your contracts sequentially
@@ -69,23 +73,30 @@ contract DeployScript is ScaffoldETHDeploy {
         wBTC(wbtc).mint(USER2, STARTING_USER_BALANCE);
         wETH(weth).mint(USER3, STARTING_USER_BALANCE);
         wBTC(wbtc).mint(USER3, STARTING_USER_BALANCE);
+        wETH(weth).mint(USER4, STARTING_USER_BALANCE);
+        wBTC(wbtc).mint(USER4, STARTING_USER_BALANCE);
 
         vm.stopBroadcast();
 
         vm.startBroadcast(USER2_PK);
-        wETH(weth).approve(address(dscEngine), STARTING_USER_BALANCE);
-        wBTC(wbtc).approve(address(dscEngine), STARTING_USER_BALANCE);
+        wETH(weth).approve(address(dscEngine), STARTING_USER_BALANCE * 1000);
+        wBTC(wbtc).approve(address(dscEngine), STARTING_USER_BALANCE * 1000);
         dscEngine.depositCollateral(weth, 2 ether);
         vm.stopBroadcast();
-        console.log("end broadcast");
 
         vm.startBroadcast(USER3_PK);
-        wETH(weth).approve(address(dscEngine), STARTING_USER_BALANCE);
-        wBTC(wbtc).approve(address(dscEngine), STARTING_USER_BALANCE);
-        console.log("BEFORE");
+        wETH(weth).approve(address(dscEngine), STARTING_USER_BALANCE * 1000);
+        wBTC(wbtc).approve(address(dscEngine), STARTING_USER_BALANCE * 1000);
         dscEngine.depositCollateral(weth, 10 ether);
         dscEngine.mintDSC(5000 ether);
         // dscEngine.depositCollateralAndMintDSC(weth, 1 ether, 1);
+        vm.stopBroadcast();
+
+        vm.startBroadcast(USER4_PK);
+        wETH(weth).approve(address(dscEngine), STARTING_USER_BALANCE * 1000);
+        wBTC(wbtc).approve(address(dscEngine), STARTING_USER_BALANCE * 1000);
+        dscEngine.depositCollateral(weth, 40 ether);
+        dscEngine.mintDSC(15000 ether);
         vm.stopBroadcast();
 
         console.log("in deploy script");
