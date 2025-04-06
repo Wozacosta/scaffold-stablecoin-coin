@@ -27,9 +27,17 @@ export const TokenBalance: React.FC<TokenBalanceProps> = ({ user, token }) => {
     args: [user, token],
   });
 
+  const { data: symbol } = useScaffoldReadContract({
+    contractName: "wBTC", //NOTE: hack, same contract type as wETH, so symbol should differ for wETH
+    functionName: "symbol",
+    // @ts-expect-error
+    address: token,
+    args: undefined,
+  });
+
   return (
     <p key={`${user}-${token}`}>
-      Token to {token}: {balance ? formatEther(balance) : "0"}
+      Token {symbol ?? token}: {balance ? formatEther(balance) : "0"}
     </p>
   );
 };

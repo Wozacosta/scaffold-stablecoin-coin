@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { NextPage } from "next";
 import { formatEther, parseEther } from "viem";
 import { useAccount } from "wagmi";
+import { TokenValue } from "~~/components/TokenValue";
 import { UserStatsCard } from "~~/components/UserStatsCard";
 import { AddressInput, InputBase } from "~~/components/scaffold-eth";
 import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
@@ -88,6 +89,7 @@ const ERC20: NextPage = () => {
             </div>
           </div>
 
+          {tokens?.map(token => <TokenValue key={token} token={token} />)}
           <div className="divider my-0" />
         </div>
 
