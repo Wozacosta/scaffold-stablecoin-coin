@@ -89,7 +89,7 @@ contract DeployScript is ScaffoldETHDeploy {
         wBTC(wbtc).approve(address(dscEngine), STARTING_USER_BALANCE * 1000);
         dscEngine.depositCollateral(weth, 10 ether);
         dscEngine.mintDSC(5000 ether);
-        // dscEngine.depositCollateralAndMintDSC(weth, 1 ether, 1);
+        // dscEngine.depositCollateralAndMintDsc(weth, 1 ether, 1);
         vm.stopBroadcast();
 
         vm.startBroadcast(USER4_PK);

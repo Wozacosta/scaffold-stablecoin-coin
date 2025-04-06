@@ -59,8 +59,8 @@ contract DSCEngine is ReentrancyGuard {
     ------- ERRORS ---------
     /* --------------------- */
     error DSCEngine__NeedsMoreThanZero();
-    error DSCEngine__TokenAddressesAndPriceFeedAddressesLengthMismatch();
-    error DSCEngine__NotAllowedToken();
+    error DSCEngine__TokenAddressesAndPriceFeedAddressesAmountsDontMatch();
+    error DSCEngine__TokenNotAllowed(address token);
     error DSCEngine__TransferFailed();
     error DSCEngine__BreaksHealthFactor(uint256 healthFactor);
     error DSCEngine__HealthFactorOk();
@@ -110,11 +110,11 @@ contract DSCEngine is ReentrancyGuard {
         uint256 indexed amount
     );
     event CollateralRedeemed(
-        address indexed redeemedFrom,
-        address indexed redeemedTo,
-        address indexed token,
+        address indexed redeemFrom,
+        address indexed redeemTo,
+        address token,
         uint256 amount
-    );
+    ); // if redeemFrom != redeemedTo, then it was liquidated
 
     /* --------------------- 
     ------- MODIFIERS ------
@@ -126,9 +126,9 @@ contract DSCEngine is ReentrancyGuard {
         _;
     }
 
-    modifier isAllowedToken(address tokenAddress) {
-        if (s_priceFeeds[tokenAddress] == address(0)) {
-            revert DSCEngine__NotAllowedToken();
+    modifier isAllowedToken(address token) {
+        if (s_priceFeeds[token] == address(0)) {
+            revert DSCEngine__TokenNotAllowed(token);
         }
         _;
     }
@@ -146,7 +146,7 @@ contract DSCEngine is ReentrancyGuard {
         // tokenAddresses[1] maps to priceFeedAddresses[1]
         // etc...
         if (tokenAddresses.length != priceFeedAddresses.length) {
-            revert DSCEngine__TokenAddressesAndPriceFeedAddressesLengthMismatch();
+            revert DSCEngine__TokenAddressesAndPriceFeedAddressesAmountsDontMatch();
         }
         // USD Price Feeds (ETH/USD, BTC/USD, MKR/USD)
         for (uint256 i = 0; i < tokenAddresses.length; i++) {
