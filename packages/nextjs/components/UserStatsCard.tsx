@@ -24,14 +24,22 @@ type TokenBalanceProps = {
 };
 
 export const TokenBalance: React.FC<TokenBalanceProps> = ({ user, token }) => {
-  const { data: balance } = useScaffoldReadContract({
+  const { data: balanceInProtocol } = useScaffoldReadContract({
     contractName: "DSCEngine",
     functionName: "getCollateralBalanceOfUser",
     args: [user, token],
   });
 
+  const { data: balanceWallet } = useScaffoldReadContract({
+    contractName: "wBTC", // ERC20 ABI
+    functionName: "balanceOf",
+    // @ts-expect-error
+    address: token,
+    args: [user],
+  });
+
   const { data: symbol } = useScaffoldReadContract({
-    contractName: "wBTC", //NOTE: hack, same contract type as wETH, so symbol should differ for wETH
+    contractName: "wBTC",
     functionName: "symbol",
     // @ts-expect-error
     address: token,
@@ -39,16 +47,19 @@ export const TokenBalance: React.FC<TokenBalanceProps> = ({ user, token }) => {
   });
 
   return (
-    <p key={`${user}-${token}`}>
-      Token {symbol ?? token}: {balance ? formatEther(balance) : "0"}
-    </p>
+    <div className="text-sm my-1">
+      <p>
+        <strong>{symbol ?? token}</strong>
+      </p>
+      <p className="ml-2">Protocol collateral: {balanceInProtocol ? formatEther(balanceInProtocol) : "0"}</p>
+      <p className="ml-2">Wallet balance: {balanceWallet ? formatEther(balanceWallet) : "0"}</p>
+    </div>
   );
 };
 
 export const UserStatsCard: React.FC<UserStatsCardProps> = ({ dscEngineAddress, user, collateralTokens }) => {
   const [showLiquidateForm, setShowLiquidateForm] = useState(false);
 
-  console.log({ user, collateralTokens });
   const { data: accountInfo } = useScaffoldReadContract({
     contractName: "DSCEngine",
     functionName: "getAccountInformation",
@@ -60,31 +71,49 @@ export const UserStatsCard: React.FC<UserStatsCardProps> = ({ dscEngineAddress, 
     functionName: "getHealthFactor",
     args: [user],
   });
-  console.log({ accountInfo, healthFactor });
+
+  const { data: dscBalance } = useScaffoldReadContract({
+    contractName: "DecentralizedStableCoin",
+    functionName: "balanceOf",
+    args: [user],
+  });
+
   const maxUint256Value = BigInt("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+  const hfValue = Number(formatEther(healthFactor ?? 0n));
 
   return (
     <div className="bg-base-200 p-4 rounded-xl my-2 w-full">
-      <p className="font-bold break-words">
-        User: <Address address={user} size="lg" />
-      </p>
-      <p>DSC Minted: {accountInfo?.[0] ? formatEther(accountInfo[0]) : "0"} DSC</p>
-      <p>Collateral Value (USD): {accountInfo?.[1] ? formatEther(accountInfo[1]) : "0"} USD</p>
-      <p className="font-bold">
-        Health Factor:{" "}
-        <span className={getHealthColor(Number(formatEther(healthFactor ?? 0n)))}>
-          {healthFactor === maxUint256Value ? "∞" : healthFactor ? formatEther(healthFactor) : "none"}
-        </span>
+      <p className="font-bold break-words mb-2">
+        <span className="text-sm text-gray-500">User:</span> <Address address={user} size="lg" />
       </p>
 
+      <div className="text-sm space-y-1 mb-4">
+        <p>
+          <strong>Debt (DSC Minted):</strong> {accountInfo?.[0] ? formatEther(accountInfo[0]) : "0"} DSC
+        </p>
+        <p>
+          <strong>DSC Wallet Balance:</strong> {dscBalance ? formatEther(dscBalance) : "0"} DSC
+        </p>
+        <p>
+          <strong>Total Collateral Value (USD):</strong> {accountInfo?.[1] ? formatEther(accountInfo[1]) : "0"} USD
+        </p>
+        <p className="font-bold">
+          Health Factor:{" "}
+          <span className={getHealthColor(hfValue)}>
+            {healthFactor === maxUint256Value ? "∞" : healthFactor ? formatEther(healthFactor) : "none"}
+          </span>
+        </p>
+      </div>
+
       <div className="mt-2">
-        <p className="font-semibold">Collateral Breakdown:</p>
+        <p className="font-semibold mb-1">Collateral Breakdown:</p>
         {collateralTokens.map(token => (
           <TokenBalance key={`${user}-${token}`} user={user} token={token} />
         ))}
       </div>
-      {Number(formatEther(healthFactor ?? 0n)) < 1 && (
-        <button className="btn btn-error btn-sm my-2" onClick={() => setShowLiquidateForm(!showLiquidateForm)}>
+
+      {hfValue < 1 && (
+        <button className="btn btn-error btn-sm my-3" onClick={() => setShowLiquidateForm(!showLiquidateForm)}>
           {showLiquidateForm ? "Cancel Liquidation" : "Liquidate"}
         </button>
       )}

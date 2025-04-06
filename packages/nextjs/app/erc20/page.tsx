@@ -96,10 +96,11 @@ const ERC20: NextPage = () => {
           {tokens?.map(token => <TokenValue key={token} token={token} />)}
           <div className="divider my-0" />
         </div>
-
-        {usersAddresses?.map(user => (
-          <UserStatsCard dscEngineAddress={dscEngineAddress || ""} key={user} user={user} collateralTokens={tokens} />
-        ))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {usersAddresses?.map(user => (
+            <UserStatsCard dscEngineAddress={dscEngineAddress || ""} key={user} user={user} collateralTokens={tokens} />
+          ))}
+        </div>
 
         <div className="flex flex-col justify-center items-center bg-base-300 w-full mt-8 px-8 pt-6 pb-12">
           <div className="flex justify-center items-center space-x-2 flex-col sm:flex-row">
