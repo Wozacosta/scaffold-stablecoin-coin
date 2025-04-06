@@ -1,21 +1,24 @@
-# 🏗 Scaffold-ETH 2
+# 💵 Decentralized Stablecoin (DSC) - Built with Scaffold-ETH 2
 
 <h4 align="center">
-  <a href="https://docs.scaffoldeth.io">Documentation</a> |
-  <a href="https://scaffoldeth.io">Website</a>
+  <a href="https://docs.scaffoldeth.io">Scaffold-ETH Docs</a> |
+  <a href="https://scaffoldeth.io">Scaffold-ETH Website</a>
 </h4>
 
-🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
+🧪 Build and test your own **overcollateralized stablecoin protocol**, with live health factors, liquidation incentives, and a modern dev stack.
 
-⚙️ Built using NextJS, RainbowKit, Foundry, Wagmi, Viem, and Typescript.
+Built using **Next.js**, **Foundry**, **Wagmi**, **Viem**, **Typescript**, and **Scaffold-ETH 2**.
 
-- ✅ **Contract Hot Reload**: Your frontend auto-adapts to your smart contract as you edit it.
-- 🪝 **[Custom hooks](https://docs.scaffoldeth.io/hooks/)**: Collection of React hooks wrapper around [wagmi](https://wagmi.sh/) to simplify interactions with smart contracts with typescript autocompletion.
-- 🧱 [**Components**](https://docs.scaffoldeth.io/components/): Collection of common web3 components to quickly build your frontend.
-- 🔥 **Burner Wallet & Local Faucet**: Quickly test your application with a burner wallet and local faucet.
-- 🔐 **Integration with Wallet Providers**: Connect to different wallet providers and interact with the Ethereum network.
+- ✅ **DSC Protocol Contracts** — Overcollateralized stablecoin backed by WETH & WBTC.
+- ✅ **Live Health Monitoring** — Real-time user health factors in the frontend.
+- ✅ **Liquidation UX** — Trigger liquidations directly from the frontend.
+- ✅ **Custom Hooks & Components** — For smooth contract interaction.
+- ✅ **Invariant Testing** — Foundry fuzzing & invariant checks.
+- ✅ **Gas Reporting** — Understand gas costs per function.
 
-<img width="842" alt="image" src="https://github.com/user-attachments/assets/4c88fc77-d840-4d15-99b5-b1d9d3284f40" />
+<img width="842" alt="dsc-ui" src="https://github.com/user-attachments/assets/4c88fc77-d840-4d15-99b5-b1d9d3284f40" />
+
+---
 
 
 ## Requirements
