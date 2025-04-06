@@ -1,6 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { formatEther } from "viem";
+import { LiquidateForm } from "~~/components/LiquidateForm";
 import { Address } from "~~/components/scaffold-eth";
 import { useScaffoldReadContract } from "~~/hooks/scaffold-eth";
 
@@ -43,6 +45,9 @@ export const TokenBalance: React.FC<TokenBalanceProps> = ({ user, token }) => {
 };
 
 export const UserStatsCard: React.FC<UserStatsCardProps> = ({ user, collateralTokens }) => {
+  const [showLiquidateForm, setShowLiquidateForm] = useState(false);
+
+  console.log({ user, collateralTokens });
   const { data: accountInfo } = useScaffoldReadContract({
     contractName: "DSCEngine",
     functionName: "getAccountInformation",
@@ -54,6 +59,7 @@ export const UserStatsCard: React.FC<UserStatsCardProps> = ({ user, collateralTo
     functionName: "getHealthFactor",
     args: [user],
   });
+  console.log({ accountInfo, healthFactor });
   const maxUint256Value = BigInt("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
 
   return (
@@ -76,6 +82,15 @@ export const UserStatsCard: React.FC<UserStatsCardProps> = ({ user, collateralTo
           <TokenBalance key={`${user}-${token}`} user={user} token={token} />
         ))}
       </div>
+      {Number(formatEther(healthFactor ?? 0n)) < 1 && (
+        <button className="btn btn-error btn-sm my-2" onClick={() => setShowLiquidateForm(!showLiquidateForm)}>
+          {showLiquidateForm ? "Cancel Liquidation" : "Liquidate"}
+        </button>
+      )}
+
+      {showLiquidateForm && (
+        <LiquidateForm user={user} collateralTokens={collateralTokens} showLiquidateForm={setShowLiquidateForm} />
+      )}
     </div>
   );
 };
