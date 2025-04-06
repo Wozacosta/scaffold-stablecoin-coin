@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     wBTC: {
-      address: "0x9e545e3c0baab3e08cdfd552c960a1050f373042",
+      address: "0x172076e0166d1f9cc711c77adf8488051744980c",
       abi: [
         {
           type: "constructor",
@@ -304,11 +304,11 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deploymentFile: "run-1743851660.json",
+      deploymentFile: "run-1743893518.json",
       deploymentScript: "Deploy.s.sol",
     },
     wETH: {
-      address: "0xa82ff9afd8f496c3d6ac40e2a0f282e47488cfc9",
+      address: "0x4ee6ecad1c2dae9f525404de8555724e3c35d07b",
       abi: [
         {
           type: "constructor",
@@ -605,11 +605,11 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deploymentFile: "run-1743851660.json",
+      deploymentFile: "run-1743893518.json",
       deploymentScript: "Deploy.s.sol",
     },
     MockV3Aggregator: {
-      address: "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+      address: "0xbec49fa140acaa83533fb00a2bb19bddd0290f25",
       abi: [
         {
           type: "constructor",
@@ -858,11 +858,11 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deploymentFile: "run-1743851660.json",
+      deploymentFile: "run-1743893518.json",
       deploymentScript: "Deploy.s.sol",
     },
     DecentralizedStableCoin: {
-      address: "0xf5059a5d33d5853360d16c683c16e67980206f36",
+      address: "0x2b0d36facd61b71cc05ab8f3d2355ec3631c0dd5",
       abi: [
         {
           type: "constructor",
@@ -1274,11 +1274,11 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deploymentFile: "run-1743851660.json",
+      deploymentFile: "run-1743893518.json",
       deploymentScript: "Deploy.s.sol",
     },
     DSCEngine: {
-      address: "0x95401dc811bb5740090279ba06cfa8fcf6113778",
+      address: "0xfbc22278a96299d91d41c453234d97b4f5eb9b2d",
       abi: [
         {
           type: "constructor",
@@ -1656,6 +1656,19 @@ const deployedContracts = {
         },
         {
           type: "function",
+          name: "getUsers",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "address[]",
+              internalType: "address[]",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
           name: "liquidate",
           inputs: [
             {
@@ -1835,7 +1848,7 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deploymentFile: "run-1743851660.json",
+      deploymentFile: "run-1743893518.json",
       deploymentScript: "Deploy.s.sol",
     },
   },

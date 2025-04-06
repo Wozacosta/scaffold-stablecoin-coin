@@ -70,25 +70,11 @@ contract DeployScript is ScaffoldETHDeploy {
         wETH(weth).mint(USER3, STARTING_USER_BALANCE);
         wBTC(wbtc).mint(USER3, STARTING_USER_BALANCE);
 
-        uint256 user2BalanceWETH = wETH(weth).balanceOf(USER2);
-        uint256 user3BalanceWETH = wETH(weth).balanceOf(USER3);
-        console.log("user2Balance (weth): ", user2BalanceWETH);
-        console.log("user3Balance (weth): ", user3BalanceWETH);
-
-        uint256 user2BalanceWBTC = wBTC(wbtc).balanceOf(USER2);
-        uint256 user3BalanceWBTC = wBTC(wbtc).balanceOf(USER3);
-        console.log("user2Balance (wbtc): ", user2BalanceWBTC);
-        console.log("user3Balance (wbtc): ", user3BalanceWBTC);
-
         vm.stopBroadcast();
 
-        console.log("NEW BROADCAST");
         vm.startBroadcast(USER2_PK);
-        console.log("public address is %s", vm.toString(USER2));
-        console.log("---> msg.sender is %s", msg.sender); // INCORRECT
         wETH(weth).approve(address(dscEngine), STARTING_USER_BALANCE);
         wBTC(wbtc).approve(address(dscEngine), STARTING_USER_BALANCE);
-        console.log("---> msg.sender is %s", msg.sender); // INCORRECT
         dscEngine.depositCollateral(weth, 2 ether);
         vm.stopBroadcast();
         console.log("end broadcast");
@@ -98,7 +84,7 @@ contract DeployScript is ScaffoldETHDeploy {
         wBTC(wbtc).approve(address(dscEngine), STARTING_USER_BALANCE);
         console.log("BEFORE");
         dscEngine.depositCollateral(weth, 10 ether);
-        dscEngine.mintDSC(2);
+        dscEngine.mintDSC(5000 ether);
         // dscEngine.depositCollateralAndMintDSC(weth, 1 ether, 1);
         vm.stopBroadcast();
 

@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { NextPage } from "next";
 import { formatEther, parseEther } from "viem";
 import { useAccount } from "wagmi";
+import { UserStatsCard } from "~~/components/UserStatsCard";
 import { AddressInput, InputBase } from "~~/components/scaffold-eth";
 import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
@@ -51,11 +52,25 @@ const ERC20: NextPage = () => {
 
   const { writeContractAsync: writeSE2TokenAsync } = useScaffoldWriteContract("DecentralizedStableCoin");
 
+  const { data: users } = useScaffoldReadContract({
+    contractName: "DSCEngine",
+    functionName: "getUsers",
+  });
+  const { data: collateralTokens } = useScaffoldReadContract({
+    contractName: "DSCEngine",
+    functionName: "getCollateralTokens",
+  });
+  console.log({ users, collateralTokens });
+  if (!users || !collateralTokens) {
+    return <div>Loading...</div>;
+  }
+  const usersAddresses = (users ?? []).flat().map(String);
+  const tokens = (collateralTokens ?? []).flat().map(String);
   return (
     <>
       <div className="flex items-center flex-col flex-grow pt-10">
         <div className="px-5 text-center max-w-4xl">
-          <h1 className="text-4xl font-bold">ERC-20 Token</h1>
+          <h1 className="text-4xl font-bold">DecentralizedStableCoin</h1>
           <div>
             <div className="flex justify-center items-center space-x-2 flex-col sm:flex-row">
               <p className="my-2 mr-2 font-bold text-2xl">Total DSC Supply:</p>
@@ -75,6 +90,8 @@ const ERC20: NextPage = () => {
 
           <div className="divider my-0" />
         </div>
+
+        {usersAddresses?.map(user => <UserStatsCard key={user} user={user} collateralTokens={tokens} />)}
 
         <div className="flex flex-col justify-center items-center bg-base-300 w-full mt-8 px-8 pt-6 pb-12">
           <div className="flex justify-center items-center space-x-2 flex-col sm:flex-row">

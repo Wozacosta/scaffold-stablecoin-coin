@@ -96,6 +96,10 @@ contract DSCEngine is ReentrancyGuard {
     DecentralizedStableCoin private immutable i_dsc;
     address[] private s_collateralTokens;
 
+    // Keep track of users
+    address[] private s_users;
+    mapping(address => bool) private s_hasInteracted;
+
     /* --------------------- 
     ------- EVENTS ---------
     /* --------------------- */
@@ -203,6 +207,7 @@ contract DSCEngine is ReentrancyGuard {
             tokenCollateralAddress,
             amountCollateral
         );
+        _addUser(msg.sender);
         // Interactions
         // TODO: allowance checks?
         // https://ethereum.stackexchange.com/questions/28972/who-is-msg-sender-when-calling-a-contract-from-a-contract
@@ -281,6 +286,7 @@ contract DSCEngine is ReentrancyGuard {
         console.log("address caller = %s", address(this));
         console.log("will mint, msg.sender = %s", msg.sender);
         bool minted = i_dsc.mint(msg.sender, amountDscToMint);
+        _addUser(msg.sender);
         if (!minted) {
             revert DSCEngine__MintFailed();
         }
@@ -468,9 +474,18 @@ contract DSCEngine is ReentrancyGuard {
         if (userHealthFactor < MIN_HEALTH_FACTOR) {
             revert DSCEngine__BreaksHealthFactor(userHealthFactor);
         }
-    } /* --------------------- 
+    }
+
+    function _addUser(address user) private {
+        if (!s_hasInteracted[user]) {
+            s_hasInteracted[user] = true;
+            s_users.push(user);
+        }
+    }
+
+    /* --------------------- 
         ------- PUBLIC & EXTERNAL VIEW FUNCTIONS
-        /* --------------------- */
+   /* --------------------- */
 
     function getHealthFactor(address user) external view returns (uint256) {
         return _healthFactor(user);
@@ -600,6 +615,7 @@ contract DSCEngine is ReentrancyGuard {
     }
 
     // Internal function to calculate total collateral value in USD
+    // NOTE: USD with 18 decimals
     function _getTotalCollateralValueUsd()
         internal
         view
@@ -620,10 +636,14 @@ contract DSCEngine is ReentrancyGuard {
                 console.log("pricefeed2 = %d", priceWithPrecision);
 
                 uint256 usdValue = (priceWithPrecision * tokenBalance) /
-                    (PRECISION * PRECISION);
+                    (PRECISION);
                 console.log("usdvalue = %d", usdValue);
                 totalCollateralValueInUsd += usdValue;
             }
         }
+    }
+
+    function getUsers() external view returns (address[] memory) {
+        return s_users;
     }
 }
