@@ -43,10 +43,10 @@ bracket_spacing = true
 int_types = "long"
 
 
-# remappings = [
-#   '@chainlink/contracts/=lib/chainlink-brownie-contracts/contracts/',
-#   '@openzeppelin/contracts=lib/openzeppelin-contracts/contracts',
-# ]
+[invariant]
+runs = 64
+depth = 64
+fail_on_revert = true
 
 
 # See more config options https://book.getfoundry.sh/reference/config/overview
