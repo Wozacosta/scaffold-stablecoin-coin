@@ -2,10 +2,10 @@
 
 pragma solidity ^0.8.19;
 
-// // Invariants:
-// // protocol must never be insolvent / undercollateralized
-// // users cant create stablecoins with a bad health factor
-// // a user should only be able to be liquidated if they have a bad health factor
+// Invariants:
+// protocol must never be insolvent / undercollateralized
+// TODO: users cant create stablecoins with a bad health factor
+// TODO: a user should only be able to be liquidated if they have a bad health factor
 
 import {Test} from "forge-std/Test.sol";
 import {StdInvariant} from "forge-std/StdInvariant.sol";
@@ -13,11 +13,12 @@ import {DSCEngine} from "../../../contracts/DSCEngine.sol";
 import {DecentralizedStableCoin} from "../../../contracts/DecentralizedStableCoin.sol";
 import {HelperConfig} from "../../../script/test/HelperConfig.s.sol";
 import {DeployDSC} from "../../../script/test/DeployDSC.s.sol";
+// import { ERC20Mock } from "@openzeppelin/contracts/mocks/ERC20Mock.sol"; Updated mock location
 import {ERC20Mock} from "../../mocks/ERC20Mock.sol";
-import {ContinueOnRevertHandler} from "./ContinueOnRevertHandler.t.sol";
+import {StopOnRevertHandler} from "./StopOnRevertHandler.t.sol";
 import {console} from "forge-std/console.sol";
 
-contract ContinueOnRevertInvariants is StdInvariant, Test {
+contract StopOnRevertInvariants is StdInvariant, Test {
     DSCEngine public dsce;
     DecentralizedStableCoin public dsc;
     HelperConfig public helperConfig;
@@ -39,29 +40,27 @@ contract ContinueOnRevertInvariants is StdInvariant, Test {
     address public liquidator = makeAddr("liquidator");
     uint256 public collateralToCover = 20 ether;
 
-    ContinueOnRevertHandler public handler;
+    StopOnRevertHandler public handler;
 
     function setUp() external {
         DeployDSC deployer = new DeployDSC();
         (dsc, dsce, helperConfig) = deployer.run();
         (ethUsdPriceFeed, btcUsdPriceFeed, weth, wbtc, ) = helperConfig
             .activeNetworkConfig();
-        handler = new ContinueOnRevertHandler(dsce, dsc);
+        handler = new StopOnRevertHandler(dsce, dsc);
         targetContract(address(handler));
-        // targetContract(address(ethUsdPriceFeed));// Why can't we just do this?
+        // targetContract(address(ethUsdPriceFeed)); Why can't we just do this?
     }
 
-    // NOTE: "During fuzzing/invariant tests, if a function reverts, continue fuzzing instead of failing the test."
-    /// forge-config: default.invariant.fail-on-revert = false
-    function invariant_protocolMustHaveMoreValueThanTotalSupplyDollars()
+    function invariant_protocolMustHaveMoreValueThatTotalSupplyDollars()
         public
         view
     {
         uint256 totalSupply = dsc.totalSupply();
-        uint256 wethDeposited = ERC20Mock(weth).balanceOf(address(dsce));
+        uint256 wethDeposted = ERC20Mock(weth).balanceOf(address(dsce));
         uint256 wbtcDeposited = ERC20Mock(wbtc).balanceOf(address(dsce));
 
-        uint256 wethValue = dsce.getUsdValue(weth, wethDeposited);
+        uint256 wethValue = dsce.getUsdValue(weth, wethDeposted);
         uint256 wbtcValue = dsce.getUsdValue(wbtc, wbtcDeposited);
 
         console.log("wethValue: %s", wethValue);
@@ -70,10 +69,17 @@ contract ContinueOnRevertInvariants is StdInvariant, Test {
         assert(wethValue + wbtcValue >= totalSupply);
     }
 
-    // function invariant_userCantCreateStablecoinWithPoorHealthFactor() public {}
-
-    /// forge-config: default.invariant.fail-on-revert = false
-    function invariant_callSummary() public view {
-        handler.callSummary();
+    function invariant_gettersCantRevert() public view {
+        dsce.getAdditionalFeedPrecision();
+        dsce.getCollateralTokens();
+        dsce.getLiquidationBonus();
+        dsce.getLiquidationThreshold();
+        dsce.getMinHealthFactor();
+        dsce.getPrecision();
+        dsce.getDsc();
+        // dsce.getTokenAmountFromUsd();
+        // dsce.getCollateralTokenPriceFeed();
+        // dsce.getCollateralBalanceOfUser();
+        // getAccountCollateralValue();
     }
 }
