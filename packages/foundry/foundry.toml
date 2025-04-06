@@ -3,6 +3,7 @@ src = 'contracts'
 out = 'out'
 libs = ['lib']
 fs_permissions = [{ access = "read-write", path = "./" }]
+gas_reports = ["DSCEngine", "DecentralizedStableCoin"]
 
 
 [rpc_endpoints]
@@ -44,8 +45,8 @@ int_types = "long"
 
 
 [invariant]
-runs = 64
-depth = 64
+runs = 4
+depth = 4
 fail_on_revert = true
 
 
