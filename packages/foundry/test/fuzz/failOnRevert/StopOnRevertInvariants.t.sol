@@ -69,6 +69,20 @@ contract StopOnRevertInvariants is StdInvariant, Test {
         assert(wethValue + wbtcValue >= totalSupply);
     }
 
+    // NOTE: 5
+    function invariant_calculateRiskMetricNeverRevertsIfSafe() public view {
+        // uint256 minted = dsce.totalMintedAction();
+        // uint256 redeemed = dsce.totalRedeemAction();
+        // console.log("minted: %s", minted);
+        // console.log("redeemed: %s", redeemed);
+
+        // if (minted > redeemed) {
+        uint256 result = dsce.calculateRiskMetric();
+        console.log("result: %s", result);
+        assert(result >= 0); // it should succeed and give a valid number
+        // }
+    }
+
     function invariant_gettersCantRevert() public view {
         dsce.getAdditionalFeedPrecision();
         dsce.getCollateralTokens();

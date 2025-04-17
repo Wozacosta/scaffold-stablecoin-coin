@@ -646,4 +646,46 @@ contract DSCEngine is ReentrancyGuard {
     function getUsers() external view returns (address[] memory) {
         return s_users;
     }
+
+    // function divideCollateralByDebt(
+    //     address user
+    // ) external view returns (uint256) {
+    //     (
+    //         uint256 totalDscMinted,
+    //         uint256 collateralValueInUsd
+    //     ) = _getAccountInformation(user);
+    //     return collateralValueInUsd / totalDscMinted;
+    // }
+
+    uint256 public totalMintedAction;
+    uint256 public totalRedeemAction;
+
+    function recordMintAction(uint256 amount) external {
+        totalMintedAction += amount;
+    }
+
+    function recordRedeemAction(uint256 amount) external {
+        totalRedeemAction += amount;
+    }
+
+    function calculateRiskMetric() external view returns (uint256) {
+        uint256 denominator = totalMintedAction - totalRedeemAction;
+        return _getTotalCollateralValueUsd() / denominator;
+    }
+
+    // function calculateRiskMetric() external view returns (uint256) {
+    //     uint256 denominator = totalMintedAction - totalRedeemAction;
+    //     // NOTE 7
+    //     if (denominator == 0) return 0;
+    //     return _getTotalCollateralValueUsd() / denominator;
+    // }
+
+    // function calculateRiskMetric() external view returns (uint256) {
+    //     if (totalMintedAction <= totalRedeemAction) {
+    //         return 0;
+    //     }
+    //     uint256 denominator = totalMintedAction - totalRedeemAction;
+    //     if (denominator == 0) return 0;
+    //     return _getTotalCollateralValueUsd() / denominator;
+    // }
 }

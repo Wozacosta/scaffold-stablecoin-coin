@@ -45,8 +45,8 @@ int_types = "long"
 
 
 [invariant]
-runs = 4
-depth = 4
+runs = 60
+depth = 60
 fail_on_revert = true
 
 
