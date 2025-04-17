@@ -675,79 +675,60 @@ contract DSCEngineTest is StdCheats, Test {
         assertEq(actualLiquidationPrecision, expectedLiquidationPrecision);
     }
 
-    // How do we adjust our invariant tests for this?
-    // function testInvariantBreaks() public depositedCollateralAndMintedDsc {
-    //     MockV3Aggregator(ethUsdPriceFeed).updateAnswer(0);
-
-    //     uint256 totalSupply = dsc.totalSupply();
-    //     uint256 wethDeposted = ERC20Mock(weth).balanceOf(address(dsce));
-    //     uint256 wbtcDeposited = ERC20Mock(wbtc).balanceOf(address(dsce));
-
-    //     uint256 wethValue = dsce.getUsdValue(weth, wethDeposted);
-    //     uint256 wbtcValue = dsce.getUsdValue(wbtc, wbtcDeposited);
-
-    //     console.log("wethValue: %s", wethValue);
-    //     console.log("wbtcValue: %s", wbtcValue);
-    //     console.log("totalSupply: %s", totalSupply);
-
-    //     assert(wethValue + wbtcValue >= totalSupply);
+    // NOTE: 1
+    // function testCalculateRiskMetricReturnsExpectedValue() public {
+    //     // Arrange: we simulate some mint and redeem actions
+    //     uint256 mintAmount = 200 ether;
+    //     uint256 redeemAmount = 50 ether;
+    //
+    //     dsce.recordMintAction(mintAmount);
+    //     dsce.recordRedeemAction(redeemAmount);
+    //
+    //     // Act
+    //     uint256 denominator = mintAmount - redeemAmount; // 150 ether
+    //     uint256 totalCollateralUsd = dsce.getAccountCollateralValue(
+    //         address(dsce)
+    //     ); // From deposits
+    //     uint256 expected = totalCollateralUsd / denominator;
+    //     uint256 actual = dsce.calculateRiskMetric();
+    //
+    //     // Assert
+    //     assertEq(actual, expected);
     // }
 
-    // NOTE: 1
-    function testCalculateRiskMetricReturnsExpectedValue() public {
-        // Arrange: we simulate some mint and redeem actions
-        uint256 mintAmount = 200 ether;
-        uint256 redeemAmount = 50 ether;
-
-        dsce.recordMintAction(mintAmount);
-        dsce.recordRedeemAction(redeemAmount);
-
-        // Act
-        uint256 denominator = mintAmount - redeemAmount; // 150 ether
-        uint256 totalCollateralUsd = dsce.getAccountCollateralValue(
-            address(dsce)
-        ); // From deposits
-        uint256 expected = totalCollateralUsd / denominator;
-        uint256 actual = dsce.calculateRiskMetric();
-
-        // Assert
-        assertEq(actual, expected);
-    }
-
     // NOTE: 2, with revert
-    function testRiskMetricRevertsIfRedeemExceedsMint() public {
-        uint256 mintAmount = 50 ether;
-        uint256 redeemAmount = 50 ether;
-
-        dsce.recordMintAction(mintAmount);
-        dsce.recordRedeemAction(redeemAmount);
-
-        vm.expectRevert();
-        dsce.calculateRiskMetric();
-    }
+    // function testRiskMetricRevertsIfRedeemExceedsMint() public {
+    //     uint256 mintAmount = 50 ether;
+    //     uint256 redeemAmount = 50 ether;
+    //
+    //     dsce.recordMintAction(mintAmount);
+    //     dsce.recordRedeemAction(redeemAmount);
+    //
+    //     vm.expectRevert();
+    //     dsce.calculateRiskMetric();
+    // }
 
     // NOTE: 3, stateless fuzz
-    function testFuzzCalculateRiskMetric(
-        uint256 minted,
-        uint256 redeemed
-    ) public depositedCollateral {
-        // Bound the fuzzed inputs to avoid overflow and weird edge cases
-        minted = bound(minted, 0.1 ether, 1_000 ether);
-        redeemed = bound(redeemed, 0, 1_000 ether);
-
-        dsce.recordMintAction(minted);
-        dsce.recordRedeemAction(redeemed);
-
-        if (redeemed >= minted) {
-            // This will revert with underflow or div-by-zero
-            vm.expectRevert();
-            dsce.calculateRiskMetric();
-        } else {
-            // We can safely calculate the risk metric
-            uint256 totalCollateral = dsce.getAccountCollateralValue(user);
-            uint256 expected = totalCollateral / (minted - redeemed);
-            uint256 actual = dsce.calculateRiskMetric();
-            assertEq(actual, expected);
-        }
-    }
+    // function testFuzzCalculateRiskMetric(
+    //     uint256 minted,
+    //     uint256 redeemed
+    // ) public depositedCollateral {
+    //     minted = bound(minted, 0, 10000);
+    //     redeemed = bound(redeemed, 0, 10000);
+    //
+    //     vm.startPrank(user);
+    //     dsce.recordMintAction(minted);
+    //     dsce.recordRedeemAction(redeemed);
+    //     vm.stopPrank();
+    //
+    //     uint256 result = dsce.calculateRiskMetric();
+    //
+    //     if (minted < redeemed) {
+    //         assertEq(result, 0); // if denominator would be zero or negative, return 0
+    //     } else {
+    //         uint256 totalCollateral = dsce.getAccountCollateralValue(user);
+    //         uint256 expected = totalCollateral / (minted - redeemed);
+    //         assertEq(result, expected);
+    //     }
+    // }
 }

@@ -12,7 +12,7 @@ import {DSCEngine, AggregatorV3Interface} from "../../../contracts/DSCEngine.sol
 import {DecentralizedStableCoin} from "../../../contracts/DecentralizedStableCoin.sol";
 import {console} from "forge-std/console.sol";
 
-contract StopOnRevertHandler is Test {
+contract Handler is Test {
     using EnumerableSet for EnumerableSet.AddressSet;
 
     // Deployed contracts to interact with
@@ -160,27 +160,15 @@ contract StopOnRevertHandler is Test {
         }
     }
 
-    // NOTE: 4
     function recordMintAction(uint256 amount) public {
-        amount = bound(amount, 1, 1_000 ether);
+        amount = bound(amount, 1, 1_000);
         vm.prank(msg.sender);
         dscEngine.recordMintAction(amount);
     }
 
     function recordRedeemAction(uint256 amount) public {
-        amount = bound(amount, 0, 1_000 ether);
+        amount = bound(amount, 0, 1_000);
         vm.prank(msg.sender);
         dscEngine.recordRedeemAction(amount);
-    }
-
-    function safeCalculateRiskMetric() public view returns (uint256) {
-        console.log("HERE");
-        // uint256 totalMinted = dscEngine.totalMintedAction();
-        // uint256 totalRedeemed = dscEngine.totalRedeemAction();
-        // if (totalMinted > totalRedeemed) {
-        dscEngine.calculateRiskMetric();
-        // } else {
-        //     return 0; // skip call if unsafe
-        // }
     }
 }

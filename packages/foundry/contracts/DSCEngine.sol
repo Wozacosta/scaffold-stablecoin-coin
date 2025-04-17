@@ -141,6 +141,7 @@ contract DSCEngine is ReentrancyGuard {
         address[] memory priceFeedAddresses,
         address dscAddress
     ) {
+        shouldAlwaysBeSeven = 7;
         console.log("in constructor of dscengine");
         // tokenAddresses[0] maps to priceFeedAddresses[0]
         // tokenAddresses[1] maps to priceFeedAddresses[1]
@@ -659,8 +660,12 @@ contract DSCEngine is ReentrancyGuard {
 
     uint256 public totalMintedAction;
     uint256 public totalRedeemAction;
+    uint256 public shouldAlwaysBeSeven;
 
     function recordMintAction(uint256 amount) external {
+        if (amount == 10) {
+            shouldAlwaysBeSeven = 3;
+        }
         totalMintedAction += amount;
     }
 
@@ -668,24 +673,30 @@ contract DSCEngine is ReentrancyGuard {
         totalRedeemAction += amount;
     }
 
-    function calculateRiskMetric() external view returns (uint256) {
-        uint256 denominator = totalMintedAction - totalRedeemAction;
-        return _getTotalCollateralValueUsd() / denominator;
-    }
-
     // function calculateRiskMetric() external view returns (uint256) {
     //     uint256 denominator = totalMintedAction - totalRedeemAction;
-    //     // NOTE 7
-    //     if (denominator == 0) return 0;
     //     return _getTotalCollateralValueUsd() / denominator;
     // }
 
     // function calculateRiskMetric() external view returns (uint256) {
-    //     if (totalMintedAction <= totalRedeemAction) {
+    //     if (totalMintedAction == 0 && totalRedeemAction == 0) {
+    //         return 0;
+    //     }
+    //
+    //     // NOTE: avoid underflow
+    //     if (totalMintedAction < totalRedeemAction) {
     //         return 0;
     //     }
     //     uint256 denominator = totalMintedAction - totalRedeemAction;
-    //     if (denominator == 0) return 0;
     //     return _getTotalCollateralValueUsd() / denominator;
     // }
+
+    function calculateRiskMetric() external view returns (uint256) {
+        // NOTE: avoid underflow and division by zero
+        if (totalMintedAction <= totalRedeemAction) {
+            return 0;
+        }
+        uint256 denominator = totalMintedAction - totalRedeemAction;
+        return _getTotalCollateralValueUsd() / denominator;
+    }
 }

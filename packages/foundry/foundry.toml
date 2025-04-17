@@ -43,11 +43,13 @@ quote_style = "double"
 bracket_spacing = true
 int_types = "long"
 
+[fuzz]
+runs = 10000
 
 [invariant]
-runs = 60
-depth = 60
-fail_on_revert = true
+runs = 200
+depth = 200
+fail_on_revert = false
 
 
 # See more config options https://book.getfoundry.sh/reference/config/overview

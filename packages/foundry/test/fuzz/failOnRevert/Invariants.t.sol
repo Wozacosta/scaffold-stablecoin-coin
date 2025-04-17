@@ -15,10 +15,10 @@ import {HelperConfig} from "../../../script/test/HelperConfig.s.sol";
 import {DeployDSC} from "../../../script/test/DeployDSC.s.sol";
 // import { ERC20Mock } from "@openzeppelin/contracts/mocks/ERC20Mock.sol"; Updated mock location
 import {ERC20Mock} from "../../mocks/ERC20Mock.sol";
-import {StopOnRevertHandler} from "./StopOnRevertHandler.t.sol";
+import {Handler} from "./Handler.t.sol";
 import {console} from "forge-std/console.sol";
 
-contract StopOnRevertInvariants is StdInvariant, Test {
+contract Invariants is StdInvariant, Test {
     DSCEngine public dsce;
     DecentralizedStableCoin public dsc;
     HelperConfig public helperConfig;
@@ -40,14 +40,14 @@ contract StopOnRevertInvariants is StdInvariant, Test {
     address public liquidator = makeAddr("liquidator");
     uint256 public collateralToCover = 20 ether;
 
-    StopOnRevertHandler public handler;
+    Handler public handler;
 
     function setUp() external {
         DeployDSC deployer = new DeployDSC();
         (dsc, dsce, helperConfig) = deployer.run();
         (ethUsdPriceFeed, btcUsdPriceFeed, weth, wbtc, ) = helperConfig
             .activeNetworkConfig();
-        handler = new StopOnRevertHandler(dsce, dsc);
+        handler = new Handler(dsce, dsc);
         targetContract(address(handler));
         // targetContract(address(ethUsdPriceFeed)); Why can't we just do this?
     }
@@ -71,16 +71,15 @@ contract StopOnRevertInvariants is StdInvariant, Test {
 
     // NOTE: 5
     function invariant_calculateRiskMetricNeverRevertsIfSafe() public view {
-        // uint256 minted = dsce.totalMintedAction();
-        // uint256 redeemed = dsce.totalRedeemAction();
-        // console.log("minted: %s", minted);
-        // console.log("redeemed: %s", redeemed);
-
-        // if (minted > redeemed) {
         uint256 result = dsce.calculateRiskMetric();
         console.log("result: %s", result);
         assert(result >= 0); // it should succeed and give a valid number
         // }
+    }
+
+    function invariant_shouldAlwaysBeSeven() public view {
+        uint256 result = dsce.shouldAlwaysBeSeven();
+        assert(result == 7);
     }
 
     function invariant_gettersCantRevert() public view {
